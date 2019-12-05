@@ -177,6 +177,8 @@ public class TakeoverInAppActivity extends Activity {
             inAppButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    finish();
+                    UpdateDisplayState.releaseDisplayState(mIntentId);
                     JSONObject trackingProperties = null;
                     final String uriString = inAppButtonModel.getCtaUrl();
                     if (uriString != null && uriString.length() > 0) {
@@ -216,8 +218,6 @@ public class TakeoverInAppActivity extends Activity {
                         MPLog.e(LOGTAG, "Can't put button type into json properties");
                     }
                     mMixpanel.getPeople().trackNotification("$campaign_open", inApp, trackingProperties);
-                    finish();
-                    UpdateDisplayState.releaseDisplayState(mIntentId);
                 }
             });
         } else {
