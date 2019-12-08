@@ -229,19 +229,19 @@ public class MixpanelAPI {
      * You shouldn't instantiate MixpanelAPI objects directly.
      * Use MixpanelAPI.getInstance to get an instance.
      */
-    MixpanelAPI(Context context, Future<SharedPreferences> referrerPreferences, String token, boolean optOutTrackingDefault, JSONObject superProperties, Activity activity) {
-        this(context, referrerPreferences, token, MPConfig.getInstance(context), optOutTrackingDefault, superProperties, activity);
+    MixpanelAPI(Context context, Future<SharedPreferences> referrerPreferences, String token, boolean optOutTrackingDefault, JSONObject superProperties) {
+        this(context, referrerPreferences, token, MPConfig.getInstance(context), optOutTrackingDefault, superProperties);
     }
 
     /**
      * You shouldn't instantiate MixpanelAPI objects directly.
      * Use MixpanelAPI.getInstance to get an instance.
      */
-    MixpanelAPI(Context context, Future<SharedPreferences> referrerPreferences, String token, MPConfig config, boolean optOutTrackingDefault, JSONObject superProperties, Activity activity) {
+    MixpanelAPI(Context context, Future<SharedPreferences> referrerPreferences, String token, MPConfig config, boolean optOutTrackingDefault, JSONObject superProperties) {
         mContext = context;
         mToken = token;
         mPeople = new PeopleImpl();
-        mGroups = new HashMap<>();
+        mGroups = new HashMap<String, GroupImpl>();
         mConfig = config;
 
         final Map<String, String> deviceInfo = new HashMap<String, String>();
@@ -289,7 +289,7 @@ public class MixpanelAPI {
 
         final boolean dbExists = MPDbAdapter.getInstance(mContext).getDatabaseFile().exists();
 
-        registerMixpanelActivityLifecycleCallbacks(activity);
+        registerMixpanelActivityLifecycleCallbacks();
 
         if (mPersistentIdentity.isFirstLaunch(dbExists)) {
             track(AutomaticEvents.FIRST_OPEN, null, true);
@@ -400,8 +400,8 @@ public class MixpanelAPI {
      *     {@link #optOutTracking()}.
      * @return an instance of MixpanelAPI associated with your project
      */
-    public static MixpanelAPI getInstance(Context context, String token, boolean optOutTrackingDefault, Activity activity) {
-        return getInstance(context, token, optOutTrackingDefault, activity);
+    public static MixpanelAPI getInstance(Context context, String token, boolean optOutTrackingDefault) {
+        return getInstance(context, token, optOutTrackingDefault, null);
     }
 
     /**
@@ -431,8 +431,8 @@ public class MixpanelAPI {
      * @param superProperties A JSONObject containing super properties to register.
      * @return an instance of MixpanelAPI associated with your project
      */
-    public static MixpanelAPI getInstance(Context context, String token, JSONObject superProperties, Activity activity) {
-        return getInstance(context, token, false, superProperties, activity);
+    public static MixpanelAPI getInstance(Context context, String token, JSONObject superProperties) {
+        return getInstance(context, token, false, superProperties);
     }
 
     /**
@@ -464,7 +464,7 @@ public class MixpanelAPI {
      * @param superProperties A JSONObject containing super properties to register.
      * @return an instance of MixpanelAPI associated with your project
      */
-    public static MixpanelAPI getInstance(Context context, String token, boolean optOutTrackingDefault, JSONObject superProperties, Activity activity) {
+    public static MixpanelAPI getInstance(Context context, String token, boolean optOutTrackingDefault, JSONObject superProperties) {
         if (null == token || null == context) {
             return null;
         }
@@ -483,7 +483,7 @@ public class MixpanelAPI {
 
             MixpanelAPI instance = instances.get(appContext);
             if (null == instance && ConfigurationChecker.checkBasicConfiguration(appContext)) {
-                instance = new MixpanelAPI(appContext, sReferrerPrefs, token, optOutTrackingDefault, superProperties, activity);
+                instance = new MixpanelAPI(appContext, sReferrerPrefs, token, optOutTrackingDefault, superProperties);
                 registerAppLinksListeners(context, instance);
                 instances.put(appContext, instance);
                 if (ConfigurationChecker.checkPushNotificationConfiguration(appContext)) {
@@ -1835,11 +1835,11 @@ public class MixpanelAPI {
      * set com.mixpanel.android.MPConfig.AutoShowMixpanelUpdates to false in your AndroidManifest.xml
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    void registerMixpanelActivityLifecycleCallbacks(Activity activity) {
+    void registerMixpanelActivityLifecycleCallbacks() {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             if (mContext.getApplicationContext() instanceof Application) {
                 final Application app = (Application) mContext.getApplicationContext();
-                mMixpanelActivityLifecycleCallbacks = new MixpanelActivityLifecycleCallbacks(this, mConfig, activity);
+                mMixpanelActivityLifecycleCallbacks = new MixpanelActivityLifecycleCallbacks(this, mConfig);
                 app.registerActivityLifecycleCallbacks(mMixpanelActivityLifecycleCallbacks);
             } else {
                 MPLog.i(LOGTAG, "Context is not an Application, Mixpanel will not automatically show in-app notifications or A/B test experiments. We won't be able to automatically flush on an app background.");
@@ -2879,6 +2879,10 @@ public class MixpanelAPI {
         } catch (final IllegalAccessException e) {
             MPLog.d(APP_LINKS_LOGTAG, "App Links tracking will not be enabled due to this exception: " + e.getMessage());
         }
+    }
+
+    public void setCurrentActivity(Activity activity) {
+        mMixpanelActivityLifecycleCallbacks.setCurrentActivity(activity);
     }
 
     private static void checkIntentForInboundAppLink(Context context) {

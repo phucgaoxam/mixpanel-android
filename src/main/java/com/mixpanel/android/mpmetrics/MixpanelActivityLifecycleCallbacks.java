@@ -28,14 +28,11 @@ class MixpanelActivityLifecycleCallbacks implements Application.ActivityLifecycl
     private static Double sStartSessionTime;
     public static final int CHECK_DELAY = 500;
 
-    public MixpanelActivityLifecycleCallbacks(MixpanelAPI mpInstance, MPConfig config, Activity activity) {
+    public MixpanelActivityLifecycleCallbacks(MixpanelAPI mpInstance, MPConfig config) {
         mMpInstance = mpInstance;
         mConfig = config;
         if (sStartSessionTime == null) {
             sStartSessionTime = (double) System.currentTimeMillis();
-        }
-        if (mCurrentActivity == null) {
-            mCurrentActivity = new WeakReference<>(activity);
         }
     }
 
@@ -155,6 +152,12 @@ class MixpanelActivityLifecycleCallbacks implements Application.ActivityLifecycl
             }
         } catch (BadParcelableException e) {
             // https://github.com/mixpanel/mixpanel-android/issues/251
+        }
+    }
+
+    public void setCurrentActivity(Activity activity) {
+        if (mCurrentActivity == null) {
+            mCurrentActivity = new WeakReference<>(activity);
         }
     }
 
