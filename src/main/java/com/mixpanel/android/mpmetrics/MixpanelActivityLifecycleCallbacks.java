@@ -20,7 +20,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-/* package */ class MixpanelActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
+class MixpanelActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private Runnable check;
     private boolean mIsForeground = true;
@@ -38,6 +38,9 @@ import java.util.Locale;
 
     @Override
     public void onActivityStarted(Activity activity) {
+        if (mCurrentActivity == null) {
+            mCurrentActivity = new WeakReference<>(activity);
+        }
         trackCampaignOpenedIfNeeded(activity.getIntent());
 
         if (android.os.Build.VERSION.SDK_INT >= MPConfig.UI_FEATURES_MIN_API && mConfig.getAutoShowMixpanelUpdates()) {
@@ -47,7 +50,11 @@ import java.util.Locale;
     }
 
     @Override
-    public void onActivityCreated(Activity activity, Bundle savedInstanceState) { }
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+        if (mCurrentActivity == null) {
+            mCurrentActivity = new WeakReference<>(activity);
+        }
+    }
 
     @Override
     public void onActivityPaused(final Activity activity) {

@@ -1833,7 +1833,7 @@ public class MixpanelAPI {
      * set com.mixpanel.android.MPConfig.AutoShowMixpanelUpdates to false in your AndroidManifest.xml
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    /* package */ void registerMixpanelActivityLifecycleCallbacks() {
+    void registerMixpanelActivityLifecycleCallbacks() {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             if (mContext.getApplicationContext() instanceof Application) {
                 final Application app = (Application) mContext.getApplicationContext();
@@ -1865,22 +1865,22 @@ public class MixpanelAPI {
         return false;
     }
 
-    /* package */ void onBackground() {
+     void onBackground() {
         flush();
         mUpdatesFromMixpanel.applyPersistedUpdates();
     }
 
-    /* package */ void onForeground() {
+     void onForeground() {
         mSessionMetadata.initSession();
     }
 
     // Package-level access. Used (at least) by MixpanelFCMMessagingService
     // when OS-level events occur.
-    /* package */ interface InstanceProcessor {
+     interface InstanceProcessor {
         public void process(MixpanelAPI m);
     }
 
-    /* package */ static void allInstances(InstanceProcessor processor) {
+     static void allInstances(InstanceProcessor processor) {
         synchronized (sInstanceMap) {
             for (final Map<Context, MixpanelAPI> contextInstances : sInstanceMap.values()) {
                 for (final MixpanelAPI instance : contextInstances.values()) {
@@ -1894,15 +1894,15 @@ public class MixpanelAPI {
     // Conveniences for testing. These methods should not be called by
     // non-test client code.
 
-    /* package */ AnalyticsMessages getAnalyticsMessages() {
+     AnalyticsMessages getAnalyticsMessages() {
         return AnalyticsMessages.getInstance(mContext);
     }
 
-    /* package */ DecideMessages getDecideMessages() {
+     DecideMessages getDecideMessages() {
         return mDecideMessages;
     }
 
-    /* package */ PersistentIdentity getPersistentIdentity(final Context context, Future<SharedPreferences> referrerPreferences, final String token) {
+     PersistentIdentity getPersistentIdentity(final Context context, Future<SharedPreferences> referrerPreferences, final String token) {
         final SharedPreferencesLoader.OnPrefsLoadedListener listener = new SharedPreferencesLoader.OnPrefsLoadedListener() {
             @Override
             public void onPrefsLoaded(SharedPreferences preferences) {
@@ -1925,11 +1925,11 @@ public class MixpanelAPI {
         return new PersistentIdentity(referrerPreferences, storedPreferences, timeEventsPrefs, mixpanelPrefs);
     }
 
-    /* package */ DecideMessages constructDecideUpdates(final String token, final DecideMessages.OnNewResultsListener listener, UpdatesFromMixpanel updatesFromMixpanel) {
+     DecideMessages constructDecideUpdates(final String token, final DecideMessages.OnNewResultsListener listener, UpdatesFromMixpanel updatesFromMixpanel) {
         return new DecideMessages(mContext, token, listener, updatesFromMixpanel, mPersistentIdentity.getSeenCampaignIds());
     }
 
-    /* package */ UpdatesListener constructUpdatesListener() {
+     UpdatesListener constructUpdatesListener() {
         if (Build.VERSION.SDK_INT < MPConfig.UI_FEATURES_MIN_API) {
             MPLog.i(LOGTAG, "Notifications are not supported on this Android OS Version");
             return new UnsupportedUpdatesListener();
@@ -1938,7 +1938,7 @@ public class MixpanelAPI {
         }
     }
 
-    /* package */ UpdatesFromMixpanel constructUpdatesFromMixpanel(final Context context, final String token) {
+     UpdatesFromMixpanel constructUpdatesFromMixpanel(final Context context, final String token) {
         if (Build.VERSION.SDK_INT < MPConfig.UI_FEATURES_MIN_API) {
             MPLog.i(LOGTAG, "SDK version is lower than " + MPConfig.UI_FEATURES_MIN_API + ". Web Configuration, A/B Testing, and Dynamic Tweaks are disabled.");
             return new NoOpUpdatesFromMixpanel(sSharedTweaks);
@@ -1950,7 +1950,7 @@ public class MixpanelAPI {
         }
     }
 
-    /* package */ TrackingDebug constructTrackingDebug() {
+     TrackingDebug constructTrackingDebug() {
         if (mUpdatesFromMixpanel instanceof ViewCrawler) {
             return (TrackingDebug) mUpdatesFromMixpanel;
         }
@@ -1958,7 +1958,7 @@ public class MixpanelAPI {
         return null;
     }
 
-    /* package */ boolean sendAppOpen() {
+     boolean sendAppOpen() {
         return !mConfig.getDisableAppOpenEvent();
     }
 
@@ -2698,7 +2698,7 @@ public class MixpanelAPI {
         private final Executor mExecutor = Executors.newSingleThreadExecutor();
     }
 
-    /* package */ class NoOpUpdatesFromMixpanel implements UpdatesFromMixpanel {
+     class NoOpUpdatesFromMixpanel implements UpdatesFromMixpanel {
         public NoOpUpdatesFromMixpanel(Tweaks tweaks) {
             mTweaks = tweaks;
         }
