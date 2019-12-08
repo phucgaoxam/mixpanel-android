@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 // Will be called from both customer threads and the Mixpanel worker thread.
-/* package */ class DecideMessages {
+class DecideMessages {
 
     public interface OnNewResultsListener {
         void onNewResults();
@@ -214,7 +214,13 @@ import java.util.Set;
         return (! mUnseenNotifications.isEmpty()) || (mVariants != null && mVariants.length() > 0);
     }
 
-    /* package */ synchronized boolean hasNotificationsAvailable() {
+    public synchronized void reset() {
+        mUnseenNotifications.clear();
+        mNotificationIds.clear();
+        mUnseenEventTriggeredNotifications.clear();
+    }
+
+     synchronized boolean hasNotificationsAvailable() {
         return (!mUnseenEventTriggeredNotifications.isEmpty() || !mUnseenNotifications.isEmpty());
     }
 

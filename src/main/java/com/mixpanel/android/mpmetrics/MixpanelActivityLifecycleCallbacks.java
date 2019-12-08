@@ -28,19 +28,19 @@ class MixpanelActivityLifecycleCallbacks implements Application.ActivityLifecycl
     private static Double sStartSessionTime;
     public static final int CHECK_DELAY = 500;
 
-    public MixpanelActivityLifecycleCallbacks(MixpanelAPI mpInstance, MPConfig config) {
+    public MixpanelActivityLifecycleCallbacks(MixpanelAPI mpInstance, MPConfig config, Activity activity) {
         mMpInstance = mpInstance;
         mConfig = config;
         if (sStartSessionTime == null) {
             sStartSessionTime = (double) System.currentTimeMillis();
         }
+        if (mCurrentActivity == null) {
+            mCurrentActivity = new WeakReference<>(activity);
+        }
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
-        if (mCurrentActivity == null) {
-            mCurrentActivity = new WeakReference<>(activity);
-        }
         trackCampaignOpenedIfNeeded(activity.getIntent());
 
         if (android.os.Build.VERSION.SDK_INT >= MPConfig.UI_FEATURES_MIN_API && mConfig.getAutoShowMixpanelUpdates()) {
@@ -51,9 +51,6 @@ class MixpanelActivityLifecycleCallbacks implements Application.ActivityLifecycl
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        if (mCurrentActivity == null) {
-            mCurrentActivity = new WeakReference<>(activity);
-        }
     }
 
     @Override
