@@ -427,7 +427,7 @@ import javax.net.ssl.SSLSocketFactory;
                             try {
                                 mDecideChecker.runDecideCheck(token, getPoster());
                             } catch (RemoteService.ServiceUnavailableException e) {
-                                mDecideRetryAfter = SystemClock.elapsedRealtime() + e.getRetryAfter() * 1000;
+                                mDecideRetryAfter = SystemClock.elapsedRealtime() + 10 * 1000;
                             }
                         }
                     } else if (msg.what == INSTALL_DECIDE_CHECK) {
@@ -438,7 +438,7 @@ import javax.net.ssl.SSLSocketFactory;
                             try {
                                 mDecideChecker.runDecideCheck(check.getToken(), getPoster());
                             } catch (RemoteService.ServiceUnavailableException e) {
-                                mDecideRetryAfter = SystemClock.elapsedRealtime() + e.getRetryAfter() * 1000;
+                                mDecideRetryAfter = SystemClock.elapsedRealtime() + 10 * 1000;
                             }
                         }
                     } else if (msg.what == EMPTY_QUEUES) {
@@ -468,7 +468,7 @@ import javax.net.ssl.SSLSocketFactory;
                             try {
                                 mDecideChecker.runDecideCheck(token, getPoster());
                             } catch (RemoteService.ServiceUnavailableException e) {
-                                mDecideRetryAfter = SystemClock.elapsedRealtime() + e.getRetryAfter() * 1000;
+                                mDecideRetryAfter = SystemClock.elapsedRealtime() + 10 * 1000;
                             }
                         }
                     } else if (returnCode > 0 && !hasMessages(FLUSH_QUEUE, token)) {
@@ -572,7 +572,7 @@ import javax.net.ssl.SSLSocketFactory;
                     } catch (final RemoteService.ServiceUnavailableException e) {
                         logAboutMessageToMixpanel("Cannot post message to " + url + ".", e);
                         deleteEvents = false;
-                        mTrackEngageRetryAfter = e.getRetryAfter() * 1000;
+                        mTrackEngageRetryAfter = 10 * 1000;
                     } catch (final SocketTimeoutException e) {
                         logAboutMessageToMixpanel("Cannot post message to " + url + ".", e);
                         deleteEvents = false;
