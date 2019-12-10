@@ -725,6 +725,11 @@ public class MixpanelAPI {
         mMessages.postToServer(new AnalyticsMessages.FlushDescription(mToken));
     }
 
+    public void installDecideCheck() {
+        if (hasOptedOutTracking()) return;
+        mMessages.installDecideCheck(mDecideMessages);
+    }
+
     /**
      * Returns a json object of the user's current super properties
      *
