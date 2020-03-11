@@ -73,14 +73,6 @@
                   android:theme="@style/com_mixpanel_android_TakeoverInAppActivityTheme"/>
 
         <!-- This receiver will allow your application to register for and receive Mixpanel push notifications -->
-        <service
-            android:name="com.mixpanel.android.mpmetrics.MixpanelFCMMessagingService"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
 
         <!-- This receiver will allow your application to record referrer parameters as super properties automatically -->
         <receiver android:name="com.mixpanel.android.mpmetrics.InstallReferrerReceiver" android:exported="true">

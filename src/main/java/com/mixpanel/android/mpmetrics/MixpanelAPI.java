@@ -488,7 +488,7 @@ public class MixpanelAPI {
                 instances.put(appContext, instance);
                 if (ConfigurationChecker.checkPushNotificationConfiguration(appContext)) {
                     try {
-                        MixpanelFCMMessagingService.init();
+                        //MixpanelFCMMessagingService.init();
                     } catch (Exception e) {
                         MPLog.e(LOGTAG, "Push notification could not be initialized", e);
                     }

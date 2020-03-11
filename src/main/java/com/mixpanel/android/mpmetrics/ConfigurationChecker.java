@@ -124,10 +124,10 @@ import java.util.List;
             String serviceName = resolveInfo.serviceInfo.name;
             try {
                 Class fcmClass = Class.forName(serviceName);
-                boolean extendsMpFcmService = MixpanelFCMMessagingService.class.isAssignableFrom(fcmClass);
-                if (!extendsMpFcmService) {
-                    it.remove();
-                }
+//                boolean extendsMpFcmService = MixpanelFCMMessagingService.class.isAssignableFrom(fcmClass);
+//                if (!extendsMpFcmService) {
+//                    it.remove();
+//                }
             } catch (ClassNotFoundException e) {
             }
         }
