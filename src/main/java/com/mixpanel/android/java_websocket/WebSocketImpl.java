@@ -115,12 +115,6 @@ public class WebSocketImpl implements WebSocket {
 		}
 	}
 
-	/**
-	 * crates a websocket with client role
-	 * 
-	 * @param socket
-	 *            may be unbound
-	 */
 	public WebSocketImpl( WebSocketListener listener , Draft draft ) {
 		if( listener == null || ( draft == null && role == Role.SERVER ) )// socket can be null because we want do be able to create the object without already having a bound channel
 			throw new IllegalArgumentException( "parameters must not be null" );

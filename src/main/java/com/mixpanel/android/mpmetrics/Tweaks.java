@@ -1,7 +1,5 @@
 package com.mixpanel.android.mpmetrics;
 
-import android.support.annotation.IntDef;
-
 import com.mixpanel.android.util.MPLog;
 
 import org.json.JSONException;
@@ -76,12 +74,6 @@ public class Tweaks {
         return new HashMap<String, TweakValue>(mTweakDefaultValues);
     }
 
-    @IntDef({
-            BOOLEAN_TYPE,
-            DOUBLE_TYPE,
-            LONG_TYPE,
-            STRING_TYPE
-    })
 
     @Retention(RetentionPolicy.SOURCE)
     private @interface TweakType {}
