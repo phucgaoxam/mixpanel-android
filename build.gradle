@@ -16,7 +16,7 @@ group = GROUP
 version = VERSION_NAME
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     buildToolsVersion '28.0.3'
 
     compileOptions {
@@ -25,8 +25,8 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 27
+        minSdkVersion 16
+        targetSdkVersion 28
         testApplicationId "com.mixpanel.android.mpmetrics"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
         consumerProguardFiles 'proguard.txt'
@@ -60,6 +60,7 @@ allprojects {
 // pom! If you need a transitive dependency in the library, you'll
 // have to change the bit in uploadArchives that marks all dependencies as optional.
 dependencies {
+    api 'com.google.firebase:firebase-messaging:20.1.2'
     testImplementation "org.mockito:mockito-core:2.25.1"
     androidTestImplementation "org.mockito:mockito-android:2.25.1"
 }
